@@ -12,7 +12,7 @@ A Python-based quantitative investment system powering Dagher Capital's portfoli
 
 ```bash
 # Clone
-git clone https://github.com/eliasdagger/DC.git
+git clone https://github.com/elie-dagher/DC.git
 cd DC
 
 # Install
