@@ -221,7 +221,9 @@ __marimo__/
 *.duckdb
 
 # ── Private client / portfolio data: never commit ───────────────────────────
-# Private databases (also covered by *.duckdb above; listed so it is explicit)
+# Private database (also covered by *.duckdb above; listed so it is explicit).
+# dagher.duckdb holds clients, trades, prices and companies in one file.
+dagher.duckdb
 clients.duckdb
 portfolio.duckdb
 # DuckDB write-ahead logs can hold recent trades before they reach the main file

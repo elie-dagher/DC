@@ -24,7 +24,6 @@ import pandas as pd
 import duckdb as dd
 import yfinance as yf
 from datetime import date
-# from src.utils.models import Stock, Client
 
 import numpy as np
 

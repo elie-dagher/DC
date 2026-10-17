@@ -133,15 +133,3 @@ class QualInvestmentThesis(BaseModel):
 
     status: Optional[str] = None
     price_target: Optional[float] = None
-
-
-# ── Portfolio Schema ─────────────────────────────────────────────────────────
-class Stock(BaseModel):
-    ticker: str
-    shares: float
-    purchase_date: date
-    purchase_price: float
-    sale_date: Optional[date] = None
-    sale_price: Optional[float] = None
-    dividends: Optional[float] = None
-    dividend_pct: Optional[float] = None

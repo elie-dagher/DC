@@ -29,6 +29,7 @@ from src.data.clients import get_client_data
 from src.portfolio.positions import get_client_positions, portfolio_value, portfolio_sharpe, max_drawdown
 from src.features.returns import annualized_return, volatility, simple_returns, sharpe_ratio
 from src.data.fin_data import RISK_FREE_RATE
+from src.utils.config import get_conn
 
 
 def generate_report(conn: dd.DuckDBPyConnection, client_id: int, start_date: str, end_date: str) -> None:
@@ -36,5 +37,5 @@ def generate_report(conn: dd.DuckDBPyConnection, client_id: int, start_date: str
 
 
 if __name__ == "__main__":
-    conn = dd.connect('dagher.duckdb')
+    conn = get_conn()
     generate_report(conn, 123, "2024-01-01", "2024-12-31")

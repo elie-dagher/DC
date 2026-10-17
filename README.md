@@ -27,7 +27,7 @@ pytest tests/
 
 ## Project Structure
 
-- `src/data/` — Layer 1 persistence: prices, clients, holdings, company attributes
+- `src/data/` — Layer 1 persistence: prices, clients, trades, company attributes
 - `src/features/` — Return and volatility calculations
 - `src/portfolio/` — Positions, portfolio metrics, client reporting
 - `src/mcda/` — Layer 2 screening and scoring (quant, qual, screening, scoring, sensitivity)
@@ -95,7 +95,7 @@ pytest tests/
 - `portfolio_value()` / `portfolio_sharpe()` — aggregate portfolio metrics
 - `generate_report()` — formatted terminal report per client
 
-**Database:** `clients` and `holdings` tables, both driven through `src/data/engine.py`
+**Database:** `clients` and `trades` tables, both driven through `src/data/engine.py`. Holdings are derived from `trades`.
 
 ---
 

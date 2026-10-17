@@ -42,25 +42,24 @@ Written by `cache_prices()`, read by `get_cached_price()` and everything in `fea
 
 ⚠️ The column is `id`, but `Client.client_id` is the model field. The mapping is positional in `add_client()`, so it works — but a `SELECT *` into a model would not.
 
-`Client.holdings` has no column here. Holdings live in their own table and are joined on `client_id`.
+Holdings have no table. They are derived from `trades` at any point in time.
 
-### `holdings`
+### `trades`
 
-One row per position. Joins to `clients` on `client_id`, to `prices` and `companies` on `ticker`.
+The ledger: one row per buy or sell, never edited. Written by `trade()` in `src/data/trade.py`, which rejects unknown clients and future dates. Joins to `clients` on `client_id`, to `prices` and `companies` on `tckr`.
 
 | Column | Type | |
 |---|---|---|
 | `client_id` | INTEGER | → `clients.id` |
-| `ticker` | VARCHAR | |
-| `shares` | FLOAT | |
-| `purchase_date` | DATE | |
-| `purchase_price` | FLOAT | |
-| `sale_date` | DATE | null while open |
-| `sale_price` | FLOAT | |
-| `dividends` | FLOAT | |
-| `dividend_pct` | FLOAT | |
+| `account` | VARCHAR | TFSA, RRSP, FHSA, Non-registered, Crypto |
+| `date` | DATE | |
+| `action` | VARCHAR | `buy` or `sell` |
+| `tckr` | VARCHAR | |
+| `price` | DECIMAL(18,4) | > 0 |
+| `quantity` | DECIMAL(24,10) | > 0; direction comes from `action` |
+| `currency` | VARCHAR | `USD` or `CAD` |
 
-`get_client_positions()` aggregates by ticker — `SUM(shares)`, `AVG(purchase_price)` — so several buys of the same name collapse into one position at average cost.
+Positions as of a date = buys minus sells up to that date, grouped by client, account and ticker.
 
 ---
 
@@ -148,9 +147,9 @@ Column names must match the pydantic field names exactly, so a `model_dump()` fl
                           │
         ┌─────────────────┼──────────────────┬────────────────────┐
         │                 │                  │                    │
-    holdings          prices          fundamentals_raw    qualitative_thesis
+     trades           prices          fundamentals_raw    qualitative_thesis
     client_id         ticker·date     ticker·period       ticker
-    ticker                                  │
+    tckr                                    │
         │                                   ▼
         ▼                             fundamentals
     clients                           (computed metrics)
@@ -175,7 +174,7 @@ Only the first deserves a median substitute at ranking time. Assigning `0.0` to 
 
 **Types.** Money is `FLOAT`, share counts `FLOAT` (splits produce fractions), dates `DATE` never `VARCHAR` — text dates sort alphabetically, which breaks every `ORDER BY as_of_date` in the schema.
 
-**Idempotence.** Ingestion scripts run repeatedly. `companies` is safe (change detection). `prices` and `holdings` are **not** — re-running duplicates rows.
+**Idempotence.** Ingestion scripts run repeatedly. `companies` is safe (change detection). `prices` and `trades` are **not** — re-running duplicates rows.
 
 ---
 
@@ -186,5 +185,5 @@ Only the first deserves a median substitute at ranking time. Assigning `0.0` to 
 | `companies` schema drift | live table predates `as_of_date` and holds 2 duplicate AMZN rows; needs drop + rebuild |
 | `clients.id` vs `Client.client_id` | positional insert hides the mismatch; breaks on `SELECT *` → model |
 | `prices` has no uniqueness constraint | re-ingesting a cached range duplicates rows |
-| `holdings` has no constraint | same |
+| `trades` has no uniqueness constraint | re-running an entry script duplicates trades |
 | `scripts/setup_db.py` is empty | README instructs users to run it |

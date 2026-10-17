@@ -56,7 +56,7 @@ src/
     ingestion.py     yfinance → prices
     companies.py     company attributes (slowly changing dimension)
     clients.py       client records
-    holdings.py      positions
+    trade.py         trade ledger (holdings are derived from it)
     fundamentals.py  SEC EDGAR → fundamentals_raw
     engine.py        entry point; owns the DuckDB connection
 

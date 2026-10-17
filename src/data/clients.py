@@ -20,19 +20,17 @@ Dependencies:
 - Pydantic: Data organisation and configuration
 
 Example:
-    >>> c1 = Client(id=123, name="John", risk_tolerance="High", holdings=List[Stock], goals="retirement")
+    >>> c1 = Client(client_id=123, name="John", risk_tolerance="High", goals="retirement")
 """
 
 import pandas as pd
 import duckdb as dd
 from src.utils.operations_models import Client
 
-# from src.utils.models import Client, Stock
-
 def create_clients_table(conn: dd.DuckDBPyConnection) -> None:
     conn.execute("""
         CREATE TABLE IF NOT EXISTS clients(
-            id INTEGER,
+            id INTEGER PRIMARY KEY,
             name VARCHAR,
             risk_tolerance VARCHAR,
             age INTEGER,
@@ -41,7 +39,7 @@ def create_clients_table(conn: dd.DuckDBPyConnection) -> None:
             considerations VARCHAR
             )"""
     )
-    print(f"Table: 'clients' created in clients.duckdb")
+    print(f"Table: 'clients' ready")
 
 
 def add_client(conn: dd.DuckDBPyConnection, client: Client) -> None:
@@ -67,14 +65,6 @@ def all_clients_data(conn: dd.DuckDBPyConnection) -> pd.DataFrame:
     ).df()
 
     return res
-
-c1 = Client(client_id=1, name="DC", risk_tolerance="high", goals="gains")
-conn = dd.connect('clients.duckdb')
-
-create_clients_table(conn)
-# add_client(conn, c1)
-print(all_clients_data(conn))
-
 
 
 

@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 import duckdb as dd
 from src.utils.operations_models import Client
-from src.utils.stock_models import Stock
 from src.features.returns import simple_returns, volatility, annualized_return, sharpe_ratio as single_sharpe
 from src.data.ingestion import get_cached_price
 from src.data.fin_data import RISK_FREE_RATE
+from src.utils.config import get_conn
 from datetime import date
 
 
@@ -93,7 +93,7 @@ def max_drawdown(conn: dd.DuckDBPyConnection, ticker: str) -> float:
 
 
 if __name__ == "__main__":
-    conn = dd.connect('dagher.duckdb')
+    conn = get_conn()
 
     print("\n=== Client Positions ===")
     print(get_client_positions(conn, 123).to_string())
