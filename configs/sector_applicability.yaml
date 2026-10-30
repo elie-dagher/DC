@@ -1,0 +1,46 @@
+exclusions:
+  Technology:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
+  Industrials:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
+  Consumer:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
+  Financials:
+    valuation: [enterprise_value, enterprise_multiple, ev_ebitda, p_fcf]
+    quality: [gpa, gross_margin, fcf_margin, cash_conversion]
+    health: [altman_z_score, current_ratio, quick_ratio, debt_equity, net_debt_ebitda, interest_coverage]
+    growth: [gross_profit_growth, fcf_growth]
+  Healthcare:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
+  Utilities:
+    valuation: [p_fcf]
+    quality: [gpa, gross_margin]
+    health: []
+    growth: []
+  REIT:
+    valuation: [pe, earnings_yield]
+    quality: [gpa, gross_margin, net_margin]
+    health: [current_ratio, quick_ratio]
+    growth: [eps_growth, gross_profit_growth]
+  Materials:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
+  Energy:
+    valuation: []
+    quality: []
+    health: []
+    growth: []
