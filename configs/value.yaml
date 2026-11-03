@@ -1,0 +1,21 @@
+# Refine methodology and write reasoning behind 
+v0:
+  Early-Stage:
+    valuation: 15
+    quality: 15
+    health: 30
+    growth: 30
+    capital_return: 10
+  High-Growth:
+    valuation: 10 
+    quality: 15
+    health: 20
+    growth: 30
+    capital_return: 25 
+  Mature:
+    valuation: 25
+    quality: 20
+    health: 20
+    growth: 10
+    capital_return: 25
+  

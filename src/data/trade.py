@@ -29,9 +29,11 @@ def create_trades_table(conn: dd.DuckDBPyConnection) -> None:
         """)
 
 def trade(conn: dd.DuckDBPyConnection, t: Transaction) -> None:
-    # clients and trades live in the same database, so one connection checks both
     if conn.execute("SELECT 1 FROM clients WHERE id = ?", [t.client_id]).fetchone() is None:
         raise ValueError(f"Client ID: {t.client_id} is not in the clients table")
+
+    if conn.execute("SELECT 1 FROM securities WHERE tckr = ? AND currency = ?", [t.tckr, t.currency]).fetchone() is None:
+        raise ValueError(f"{t.tckr} ({t.currency}) is not in the securities table. Add it before trading it.")
 
     if t.Date > date.today():
         raise ValueError(f"{t.Date} is in the future.")
@@ -56,7 +58,6 @@ def show_trades(conn: dd.DuckDBPyConnection, client_id=None) -> None:
     print(trades.to_string(index=False))
 
 if __name__ == "__main__":
-    # get_conn opens the test database; real trades are entered through private/enter_trades.py
     conn = get_conn()
     create_trades_table(conn)
     show_trades(conn)

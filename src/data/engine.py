@@ -37,6 +37,7 @@ from src.utils.config import get_conn
 from src.utils.operations_models import Client
 from src.utils.stock_models import Company
 from src.data.clients import create_clients_table, add_client, get_client_data
+from src.data.securities import Security, create_securities_table, add_security
 from src.data.trade import Transaction, create_trades_table, trade, show_trades
 from src.data.ingestion import get_prices, cache_prices, get_cached_price
 from src.features.returns import simple_returns, log_returns, cumulative_returns, annualized_return, volatility
@@ -47,6 +48,7 @@ from src.data.companies import create_company_attributes_table, append_company, 
 def initialize_database(conn: dd.DuckDBPyConnection) -> None:
     create_company_attributes_table(conn)
     create_clients_table(conn)
+    create_securities_table(conn)
     create_trades_table(conn)
     print("Database Initilized")
 
@@ -107,7 +109,11 @@ if __name__ == "__main__":
     create_client(conn, client1)
     print(get_client_data(conn, client1.client_id).to_string())
 
-    # Record and Portray Trades (client must exist first)
+    # Map the demo tickers (a trade is refused unless its security is known)
+    add_security(conn, Security(tckr=ticker1, currency="USD", yf_symbol=ticker1, quote_currency="USD", asset_type="stock", name="Amazon"))
+    add_security(conn, Security(tckr=ticker2, currency="USD", yf_symbol=ticker2, quote_currency="USD", asset_type="stock", name="Apple"))
+
+    # Record and Portray Trades (client and security must exist first)
     for t in trades:
         trade(conn, t)
     show_trades(conn, client1.client_id)

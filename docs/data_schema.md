@@ -59,7 +59,22 @@ The ledger: one row per buy or sell, never edited. Written by `trade()` in `src/
 | `quantity` | DECIMAL(24,10) | > 0; direction comes from `action` |
 | `currency` | VARCHAR | `USD` or `CAD` |
 
-Positions as of a date = buys minus sells up to that date, grouped by client, account and ticker.
+Positions as of a date = buys minus sells up to that date, grouped by client, account and security (via `securities`).
+
+### `securities`
+
+Lookup from what a trade says to which security it is. `AMZN`/`CAD` is the Amazon CDR, `AMZN`/`USD` the NASDAQ share: same ticker, different security and price. Written by `add_security()` in `src/data/securities.py`. `trade()` refuses a `(tckr, currency)` pair that has no row here.
+
+| Column | Type | |
+|---|---|---|
+| `tckr` | VARCHAR | PK, as written in `trades` |
+| `currency` | VARCHAR | PK, as written in `trades` |
+| `yf_symbol` | VARCHAR | what yfinance prices it under (CDRs are `.TO`, crypto `BTC-CAD`) |
+| `quote_currency` | VARCHAR | currency of the yfinance price; differs from `currency` when a CAD holding is priced off a USD quote (gold via `GC=F`) |
+| `asset_type` | VARCHAR | `stock`, `cdr`, `etf`, `crypto`, `commodity` |
+| `name` | VARCHAR | |
+
+`unmapped_securities()` lists ledger pairs with no row. Empty means every trade can be priced.
 
 ---
 

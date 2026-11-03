@@ -3,11 +3,10 @@ Module: Configuration
 
 Problem:
 All paths and keys are subject to change, which leads to changing the file path for several other files.
-As algorithms adapt, creating a single path for criteria weighing is essential efficiency.
+As algorithms adapt, creating a single path for criteria weighing is essential for efficiency.
 
 Description:
-Single source of directories for paths, environment variables, and the MCDA criteria
-defined in configs/criteria.yaml.
+Single source of directories for paths, environment variables, and the MCDA criteria defined in configs/criteria.yaml.
 
 Key Functions:
 - get_conn: Open the test database (default for all public code)
